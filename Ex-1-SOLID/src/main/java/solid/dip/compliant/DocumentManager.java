@@ -4,9 +4,9 @@ package solid.dip.compliant;
 public class DocumentManager {
 
     private String text;
-    private PrinterService pService;
+    private IPrinterService pService;
 
-    public DocumentManager(String text, PrinterService pService) {
+    public DocumentManager(String text, IPrinterService pService) {
         this.text = text;
         this.pService = pService;
     }

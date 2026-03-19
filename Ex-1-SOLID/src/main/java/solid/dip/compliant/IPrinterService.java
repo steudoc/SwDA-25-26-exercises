@@ -1,6 +1,6 @@
 package solid.dip.compliant;
 
-public interface PrinterService {
+public interface IPrinterService {
 
     public void print(String text);
 }
