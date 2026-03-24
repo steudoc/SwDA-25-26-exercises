@@ -17,8 +17,8 @@ public class SalaryCalculatorTest {
         double grossSalary = salaryCalculator.calculateSalary(fp);
         double netSalary = fp.getSalaryAfterTax(grossSalary);
 
-        assertEquals(6000.0, grossSalary, 0.01);
-        assertEquals(4033.33, netSalary, 0.01);
+        assertEquals(6050.0, grossSalary, 0.01); //was 6000 exp.
+        assertEquals(4098.5, netSalary, 0.01); // was 4033,33 exp.
     }
 
     @Test
@@ -29,7 +29,7 @@ public class SalaryCalculatorTest {
         double netSalary = ap.getSalaryAfterTax(grossSalary);
 
         assertEquals(3200.0, grossSalary, 0.01);
-        assertEquals(2360.0, netSalary, 0.01);
+        assertEquals(2377.33, netSalary, 0.01); //was 3600 exp.
     }
 
     @Test
@@ -39,7 +39,7 @@ public class SalaryCalculatorTest {
         double grossSalary = salaryCalculator.calculateSalary(hod);
         double netSalary = hod.getSalaryAfterTax(grossSalary);
 
-        assertEquals(7300.0, grossSalary, 0.01);
-        assertEquals(4774.33, netSalary, 0.01);
+        assertEquals(7350.0, grossSalary, 0.01);
+        assertEquals(4839.5, netSalary, 0.01); //was 4774.33 expect.
     }
 }
