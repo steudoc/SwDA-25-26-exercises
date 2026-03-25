@@ -1,0 +1,246 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>it.polito.softeng</groupId>
+  <artifactId>solid-exercise-2-solution</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <name> SOLID - Exercise 2 - SOLUTION</name>
+
+
+<!-- Properties section -->
+  <properties>
+    <maven.compiler.source>24</maven.compiler.source>   <!-- Change to your Java version -->
+    <maven.compiler.target>24</maven.compiler.target>   <!-- Change to your Java version -->
+  </properties>
+
+  <!-- Dependencies Section -->
+   <dependencies>
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+ <!-- Build Section -->
+
+
+<build>
+  
+
+<plugins>  <!-- start plugins-->
+
+<!-- clean src/site if previously created-->
+<plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-clean-plugin</artifactId>
+      <version>3.3.2</version>
+      <configuration>
+        <filesets>
+          <!-- Remove generated site folder -->
+          <fileset>
+            <directory>${project.basedir}/src/site</directory>
+          </fileset>
+         
+        </filesets>
+      </configuration>
+    </plugin>
+
+
+    <!-- Generate Class Diagrams from Source Code with UML Generator -->
+    <plugin>
+      <groupId>de.elnarion.maven</groupId>
+      <artifactId>plantuml-generator-maven-plugin</artifactId>
+      <version>3.0.1</version> <!-- Check https://mvnrepository.com/artifact/de.elnarion.maven/plantuml-generator-maven-plugin  -->
+      <executions>
+        <execution>
+          <id>generate-puml</id>
+          <phase>compile</phase> 
+          <goals>
+            <goal>generate</goal>
+          </goals>
+          <configuration>
+             <scanPackages> <!-- change at convenience-->
+              <scanPackage>payroll</scanPackage>    
+            </scanPackages> 
+       
+
+            <outputDirectory>${project.build.directory}/plantuml</outputDirectory>  
+            <outputFilename>classdiagram.puml</outputFilename>
+          
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+
+    
+  <!-- Render PUML files into diagrams (PNG/SVG) -->
+<plugin>
+  <groupId>com.github.funthomas424242</groupId>
+  <artifactId>plantuml-maven-plugin</artifactId>
+  <version>1.5.2</version>
+  <executions>
+    <execution>
+      <id>render-diagrams</id>
+      <phase>compile</phase>
+      <goals>
+        <goal>generate</goal>
+      </goals>
+      <configuration>
+        <sourceFiles>
+          <directory>${project.build.directory}/plantuml</directory> 
+          <includes>
+            <include>**/*.puml</include>
+          </includes>
+        </sourceFiles>
+        <outputDirectory>${project.build.directory}/plantuml-images</outputDirectory> 
+        <format>png</format>
+      </configuration>
+    </execution>
+  </executions>
+
+<dependencies>
+    <!-- Add the required PlantUML runtime -->
+    <dependency>
+      <groupId>net.sourceforge.plantuml</groupId>
+      <artifactId>plantuml</artifactId>
+      <version>1.2023.9</version> <!-- 1.2023.9 -->
+    </dependency>
+    <!-- Optional: Graphviz if using diagrams that require it -->
+  </dependencies> 
+
+</plugin>
+
+<!-- Automate copying diagrams into the site - NB does not appear in the menu, specify it in src/site/site.xml  -->
+ <plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-resources-plugin</artifactId>
+  <version>3.3.1</version>
+  <executions>
+    <execution>
+      <id>copy-diagrams</id>
+      <phase>pre-site</phase> <!-- was pre-site --> 
+      <goals>
+        <goal>copy-resources</goal>
+      </goals>
+      <configuration> 
+        <outputDirectory>${project.basedir}/src/site/resources/images/uml</outputDirectory> <!-- was ${project.build.directory}/site/images/uml-->
+        <resources> 
+          <resource>
+            <directory>${project.build.directory}/plantuml-images</directory>
+            <includes>
+              <include>**/*.png</include>
+            </includes>
+          </resource>
+        </resources>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+
+<!--  Generate uml-diagrams.md automatically -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>generate-uml-md</id>
+            <phase>pre-site</phase> <!-- was pre-site --> 
+            <configuration>
+              <target>
+                <mkdir dir="${project.basedir}/src/site/markdown"/>
+                <echo file="${project.basedir}/src/site/markdown/uml-diagrams.md">
+# UML Diagrams
+
+Here is the generated class diagram:
+
+![Class Diagram](images/uml/classdiagram.png)
+                </echo>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+
+          <!-- create site.xml where to specify menu item for UML-->
+           <execution>
+      <id>generate-site-xml</id>
+      <phase>pre-site</phase> <!-- was pre-site, earlier generate-resources --> 
+      <goals>
+        <goal>run</goal>
+      </goals>
+      <configuration>
+        <target>
+          <mkdir dir="${project.basedir}/src/site"/>
+          <echo file="${project.basedir}/src/site/site.xml">
+&lt;project name="SOLID - exercise 2 solution - UML class diagram of the  Payroll Management System"&gt;
+  &lt;skin&gt;
+    &lt;groupId&gt;org.apache.maven.skins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-fluido-skin&lt;/artifactId&gt;
+    &lt;version&gt;1.7&lt;/version&gt;
+  &lt;/skin&gt;
+  &lt;body&gt;
+    &lt;menu name="Project Reports"&gt;
+      &lt;item name="UML Diagrams" href="uml-diagrams.html"/&gt;
+      &lt;item name="Unit Tests" href="surefire-report.html"/&gt;
+    &lt;/menu&gt;
+  &lt;/body&gt;
+&lt;/project&gt;
+          </echo>
+        </target>
+      </configuration>
+    </execution>
+        </executions>
+      </plugin>
+
+
+      <!--  Markdown support for Maven Site -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.12.1</version> <!-- downgraded to 3.12.1 for compatibility issues-->
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-module-markdown</artifactId>
+            <version>1.12.0</version> <!-- downgraded for compatibility issues-->
+          </dependency>
+        </dependencies>
+      </plugin>
+
+    <!-- Tests -->
+   <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.1.2</version>
+            <configuration>
+                <useModulePath>false</useModulePath>
+            </configuration>
+    </plugin>
+
+  </plugins> <!-- end plugins-->
+</build>
+
+<reporting>
+  <plugins>
+    <!-- Unit tests (Surefire) -->
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-report-plugin</artifactId>
+      <version>3.2.5</version>
+    </plugin>
+     </plugins>
+</reporting>
+
+</project>
