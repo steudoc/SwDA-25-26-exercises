@@ -5,7 +5,7 @@ import java.time.Period;
 
 public class SalaryCalculator implements ICalculateSalary {
 
-    private ICalculateTax taxCalculator;
+    ICalculateTax taxCalculator;
 
     public SalaryCalculator() {
         this.taxCalculator = new TaxCalculator();
