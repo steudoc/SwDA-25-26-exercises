@@ -1,40 +1,41 @@
-package payroll;
+package compliant.payroll;
 
 import java.time.LocalDate;
 
-public class AssociateProfessor {
+public class AssociateProfessor implements IEmployee {
 
     private LocalDate employmentDate;
     private String surname;
     private String name;
     private int id;
-
-    private TaxCalculator taxCalculator;
+    private final double baseSalary = 3000;
+    private final double yearsMultiplier = 20;
 
     public AssociateProfessor(LocalDate employmentDate, String surname, String name, int id) {
         this.employmentDate = employmentDate;
         this.surname = surname;
         this.name = name;
         this.id = id;
-        this.taxCalculator = new TaxCalculator();
     }
 
-    
+    @Override
     public LocalDate getDateEmployment() {
         return this.employmentDate;
     }
 
-     public String getSurname() {
+    @Override
+    public String getSurname() {
         return this.surname;
     }
 
-     public double getSalaryAfterTax(double monthlySalary){
+    @Override
+    public double getBaseSalary() {
+        return this.baseSalary;
+    }
 
-        double yearlyIncome = monthlySalary*12;
-        double yearlyTax = taxCalculator.calculateTax(yearlyIncome);
-        double monthlyTax = yearlyTax /12;
-        return monthlySalary -monthlyTax;
-        
+    @Override 
+    public double getYearsMultiplier() {
+        return this.yearsMultiplier;
     }
 
 }

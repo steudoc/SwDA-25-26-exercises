@@ -1,24 +1,26 @@
-package payroll;
+package violation.payroll;
 
 import java.time.LocalDate;
 
-public class HeadOfDepartment {
+public class AssociateProfessor {
 
     private LocalDate employmentDate;
     private String surname;
     private String name;
     private int id;
+
     private TaxCalculator taxCalculator;
 
-    public HeadOfDepartment(LocalDate start, String surname, String name,int id){
-            this.id = id;
-            this.surname = surname;
-            this.name = name;
-            this.employmentDate = start;
-            this.taxCalculator = new TaxCalculator();
+    public AssociateProfessor(LocalDate employmentDate, String surname, String name, int id) {
+        this.employmentDate = employmentDate;
+        this.surname = surname;
+        this.name = name;
+        this.id = id;
+        this.taxCalculator = new TaxCalculator();
     }
 
-      public LocalDate getDateEmployment() {
+    
+    public LocalDate getDateEmployment() {
         return this.employmentDate;
     }
 
@@ -34,5 +36,5 @@ public class HeadOfDepartment {
         return monthlySalary -monthlyTax;
         
     }
-    
+
 }

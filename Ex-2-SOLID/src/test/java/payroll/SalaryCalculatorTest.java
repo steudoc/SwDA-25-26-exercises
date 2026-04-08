@@ -2,6 +2,11 @@ package payroll;
 
 import org.junit.jupiter.api.Test;
 
+import violation.payroll.AssociateProfessor;
+import violation.payroll.FullProfessor;
+import violation.payroll.HeadOfDepartment;
+import violation.payroll.SalaryCalculator;
+
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

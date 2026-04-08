@@ -1,6 +1,6 @@
-package payroll;
+package compliant.payroll;
 
-public class TaxCalculator implements ICalculate{
+public class TaxCalculator implements ICalculateTax{
 
     // as it works in Italy 
     private static final double RATE_1 = 0.23; // Up to 28,000 €
@@ -11,7 +11,7 @@ public class TaxCalculator implements ICalculate{
     private static final double LIMIT_2 = 50000;
 
 
-     @Override
+    @Override
     public double calculateTax(double yearlyIncome) {
          double taxes = 0;
 
@@ -26,26 +26,4 @@ public class TaxCalculator implements ICalculate{
         return taxes;
        
     }
-
-    @Override
-    public double calculateSalary(HeadOfDepartment employee) {
-     
-        throw new UnsupportedOperationException("Unimplemented method 'calculateSalary'");
-    }
-
-    @Override
-    public double calculateSalary(FullProfessor employee) {
-     
-        throw new UnsupportedOperationException("Unimplemented method 'calculateSalary'");
-    }
-
-    @Override
-    public double calculateSalary(AssociateProfessor employee) {
-     
-        throw new UnsupportedOperationException("Unimplemented method 'calculateSalary'");
-    }
-
-   
-
-
 }
